@@ -10,4 +10,4 @@ That's how billionaires don't pay taxes and poor people become poorer day by day
 
 ---
 
-![World Debt Illustration](assets/yourimage.jpg)
+![World Debt Illustration](assets/1752828177624.jpg.jpg)
