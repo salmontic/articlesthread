@@ -1,34 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Simple POS System</title>
+  <title>Jersey Catalog</title>
+  <meta charset="utf-8">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Point of Sale (POS) System</h1>
-  <div id="product-section">
-    <h2>Add Product</h2>
-    <input id="product-name" placeholder="Product Name">
-    <input id="product-cost" placeholder="Cost Price" type="number">
-    <input id="product-price" placeholder="Selling Price" type="number">
-    <input id="product-stock" placeholder="Stock" type="number">
-    <button onclick="addProduct()">Add Product</button>
+  <div class="container">
+    <h1>Classic Jerseys</h1>
+    <div id="jersey-list">Loading jerseys...</div>
   </div>
-  <div id="sale-section">
-    <h2>New Sale</h2>
-    <input id="sale-product" placeholder="Product Name">
-    <input id="sale-qty" placeholder="Quantity" type="number">
-    <input id="sale-paid" placeholder="Paid Amount" type="number">
-    <button onclick="addSale()">Record Sale</button>
-  </div>
-  <div id="report-section">
-    <h2>Reports</h2>
-    <button onclick="showStockReport()">Stock Report</button>
-    <button onclick="showDueReport()">Due Report</button>
-    <button onclick="showSalesProfit()">Total Sell & Profit</button>
-    <pre id="report-output"></pre>
-  </div>
-  <script src="app.js"></script>
+  <script>
+    async function loadJerseys() {
+      const response = await fetch('jerseys.csv');
+      const text = await response.text();
+      const lines = text.trim().split('\n');
+      for (let i = 1; i < lines.length; i++) {
+        const fields = lines[i].split(',');
+        document.getElementById('jersey-list').innerHTML += `
+          <div class="jersey-item">
+            <span class="code">${fields[0]}</span> |
+            <span>${fields[1]}</span> |
+            <span>${fields[2]}</span> |
+            <span class="country">${fields[3]}</span>
+          </div>`;
+      }
+    }
+    loadJerseys();
+  </script>
 </body>
 </html>
