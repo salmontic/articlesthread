@@ -1,70 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Sales Tracker</title>
-    <style>
-        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
-        h1 { color: #333; }
-        .sales-form { background: #f5f5f5; padding: 20px; border-radius: 5px; }
-        .sales-list { margin-top: 20px; }
-        .total { font-weight: bold; margin-top: 10px; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Today's Sales</h1>
-    
-    <div class="sales-form">
-        <h2>Add New Sale</h2>
-        <input type="number" id="saleAmount" placeholder="Amount" style="padding: 8px;">
-        <button onclick="addSale()" style="padding: 8px 15px;">Add</button>
-    </div>
-    
-    <div class="sales-list">
-        <h2>Today's Sales (${new Date().toLocaleDateString()})</h2>
-        <ul id="salesList"></ul>
-        <div class="total">Total: $<span id="totalSales">0</span></div>
+    <div class="container">
+        <h1>Today's Sales</h1>
+        
+        <div class="sales-form">
+            <h2>Add New Sale</h2>
+            <div class="input-group">
+                <input type="number" id="saleAmount" placeholder="Amount" step="0.01" min="0">
+                <button onclick="addSale()">Add</button>
+            </div>
+        </div>
+        
+        <div class="sales-list">
+            <h2>Sales for <span id="currentDate"></span></h2>
+            <ul id="salesList"></ul>
+            <div class="total">Total: $<span id="totalSales">0.00</span></div>
+            <button onclick="clearSales()" class="clear-btn">Clear All</button>
+        </div>
     </div>
 
-    <script>
-        let sales = [];
-        
-        function addSale() {
-            const amount = parseFloat(document.getElementById('saleAmount').value);
-            if (isNaN(amount) return;
-            
-            sales.push(amount);
-            updateSalesList();
-            document.getElementById('saleAmount').value = '';
-        }
-        
-        function updateSalesList() {
-            const list = document.getElementById('salesList');
-            const totalElement = document.getElementById('totalSales');
-            
-            list.innerHTML = '';
-            let total = 0;
-            
-            sales.forEach((sale, index) => {
-                const li = document.createElement('li');
-                li.textContent = `Sale #${index + 1}: $${sale.toFixed(2)}`;
-                list.appendChild(li);
-                total += sale;
-            });
-            
-            totalElement.textContent = total.toFixed(2);
-            
-            // Save to localStorage
-            localStorage.setItem('dailySales', JSON.stringify(sales));
-        }
-        
-        // Load saved sales
-        window.onload = function() {
-            const savedSales = localStorage.getItem('dailySales');
-            if (savedSales) {
-                sales = JSON.parse(savedSales);
-                updateSalesList();
-            }
-        };
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
