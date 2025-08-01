@@ -14,7 +14,7 @@
             <h2>Add New Sale</h2>
             <div class="input-group">
                 <input type="number" id="saleAmount" placeholder="Amount" step="0.01" min="0">
-                <button onclick="addSale()">Add</button>
+                <button id="addButton">Add</button>
             </div>
         </div>
         
@@ -22,7 +22,7 @@
             <h2>Sales for <span id="currentDate"></span></h2>
             <ul id="salesList"></ul>
             <div class="total">Total: $<span id="totalSales">0.00</span></div>
-            <button onclick="clearSales()" class="clear-btn">Clear All</button>
+            <button id="clearButton" class="clear-btn">Clear All</button>
         </div>
     </div>
 
