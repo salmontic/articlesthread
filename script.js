@@ -1,10 +1,12 @@
+// Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
-    console.log("Page loaded"); // Debug log
-    document.getElementById('currentDate').textContent = getCurrentDate();
+    // Initialize
+    document.getElementById('currentDate').textContent = new Date().toLocaleDateString();
     loadSales();
     
-    // Add event listener to the button
-    document.querySelector('.sales-form button').addEventListener('click', addSale);
+    // Set up event listeners
+    document.getElementById('addButton').addEventListener('click', addSale);
+    document.getElementById('clearButton').addEventListener('click', clearSales);
     
     // Also allow Enter key to add sales
     document.getElementById('saleAmount').addEventListener('keypress', function(e) {
@@ -14,37 +16,64 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-function getCurrentDate() {
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date().toLocaleDateString(undefined, options);
-}
-
 let sales = [];
 
 function addSale() {
     const amountInput = document.getElementById('saleAmount');
     const amount = parseFloat(amountInput.value);
     
-    console.log("Add sale clicked, amount:", amount); // Debug log
-    
     if (isNaN(amount) || amount <= 0) {
         alert('Please enter a valid amount greater than 0');
-        amountInput.focus();
         return;
     }
     
-    const newSale = {
+    sales.push({
         amount: amount,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    };
-    
-    sales.push(newSale);
-    console.log("New sale added:", newSale); // Debug log
-    console.log("All sales:", sales); // Debug log
+    });
     
     updateSalesList();
     amountInput.value = '';
     amountInput.focus();
 }
 
-// ... rest of the script.js remains the same ...
+function updateSalesList() {
+    const list = document.getElementById('salesList');
+    const totalElement = document.getElementById('totalSales');
+    
+    list.innerHTML = '';
+    let total = 0;
+    
+    sales.forEach((sale, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <span>Sale #${index + 1}</span>
+            <span>$${sale.amount.toFixed(2)}</span>
+            <small>${sale.time}</small>
+        `;
+        list.appendChild(li);
+        total += sale.amount;
+    });
+    
+    totalElement.textContent = total.toFixed(2);
+    saveSales();
+}
+
+function clearSales() {
+    if (confirm('Are you sure you want to clear all sales?')) {
+        sales = [];
+        updateSalesList();
+    }
+}
+
+function saveSales() {
+    localStorage.setItem('dailySales', JSON.stringify(sales));
+}
+
+function loadSales() {
+    const savedSales = localStorage.getItem('dailySales');
+    if (savedSales) {
+        sales = JSON.parse(savedSales);
+        updateSalesList();
+    }
+}
